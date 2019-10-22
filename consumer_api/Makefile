@@ -15,12 +15,6 @@ help:
 	@echo "make test:"
 	@echo "       Run tests with pytest(necessary kafka ON)"
 	@echo ""
-	@echo "make docker:"
-	@echo "       Run app with docker and docker"
-	@echo ""
-	@echo "make dockerdown:"
-	@echo "       Remove app from docker with docker stop"
-	@echo ""
 	@echo "make rundev:"
 	@echo "       Run the web application(necessary kafka ON)"
 	@echo ""
@@ -39,16 +33,6 @@ setup:
 
 test:
 	@pytest --verbose --disable-pytest-warnings --color=yes tests/
-
-docker:
-	@echo "---- Building & Up Container ----"
-	@docker build -t kafka-consumer . 
-	@docker run --name kafka-consumer -d -p 8081:8081 --network demo-kafka-python_demo-kafka-py kafka-consumer	
-	@sleep 5
-	@echo "---- Acess http://127.0.0.1:8081/api/consumer ----"
-
-dockerdown:
-	@docker rm kafka-consumer -f
 
 rundev:
 	python3 app.py

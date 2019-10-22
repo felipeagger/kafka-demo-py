@@ -1,0 +1,91 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Producer API",
+    "description": "Micro-Service for Producer Kafka Python Client",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:8080",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "Producer",
+      "description": "API for Producer"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/producer": {
+      "get": {
+        "tags": [
+          "Producer"
+        ],
+        "summary": "Get status of API Running",
+        "responses": {
+          "200": {
+            "description": "Hello World, Producer API Running!"
+          }
+        }
+      },
+
+      "post": {
+        "tags": [
+          "Producer"
+        ],
+        "summary": "Producer a new message",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Data of user we want Produce",
+            "schema": {
+              "$ref": "#/definitions/Msg"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success!",
+            "schema": {
+              "$ref": "#/definitions/Msg"
+            }
+          },
+          "400": {
+            "description": "Error, Bad Request!"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Msg": {
+      
+      "properties": {
+        
+        "msg": {
+          "type": "string"
+        }
+
+      }
+    }
+  }
+}

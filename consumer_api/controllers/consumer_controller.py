@@ -26,20 +26,21 @@ enable_auto_commit=True,
 group_id='consumer_api',
 value_deserializer=lambda m: json.loads(m.decode('ascii')))
 
+#for add msg of kafka
+messages = []
 
 #GET
-def get():    
-    document = {
-            'msg': 'Hello World, Consumer API Running!'
-    }
-    return corsify_response(jsonify(document)), 200
+def get():  
+    global messages  
+    return corsify_response(jsonify(messages)), 200
 
 
 def ReadMsgs():
     global consumer
+    global messages 
     print('Initializing Thread Listener...')
     for msg in consumer:
-        print('offset {} - {}'.format(msg.offset, msg.value))
+        messages.append('offset {} - {}'.format(msg.offset, msg.value))
         time.sleep(1)
 
 

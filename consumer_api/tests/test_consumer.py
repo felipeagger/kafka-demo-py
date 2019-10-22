@@ -14,73 +14,15 @@ if isfile(_ENV_FILE):
 
 from app import app #create_app
 
-newid = randint(1,1000)
-orderid = ''
-
 @pytest.fixture(scope='session')
 def client():    
     #flask_app = create_app('testing') 
     client = app.test_client()
     return client
 
-def test_orders_Post_response_201(client):     
-    global orderid
-    global newid
-    doc = {
-        'user_id': newid,
-        'item_description': 'Description Test',
-        'item_quantity': 2,
-        'item_price': 10.5,
-        'total_value': 21.00
-    }
-    response = client.post('/api/orders', json=doc)
-    orderid = response.json['_id']
-    assert response.status_code == 201
-
-def test_orders_getAll_response_200(client): 
-    response = client.get('/api/orders')
+def test_consumer_Get_Msgs_response_200(client): 
+    response = client.get('/api/consumer')
     
     #status_code = 200
     assert response.status_code == 200    
     #assert len(response.json) > 0
-
-
-def test_orders_getAllbyUser_response_404(client): 
-    global newid
-    response = client.get('/api/orders/user/'+str(newid))
-    
-    #status_code = 404
-    assert response.status_code == 404    
-    assert len(response.json) > 0    
-    
-
-def test_orders_getOne_response_200(client): 
-    global orderid
-    response = client.get('/api/orders/'+orderid)
-
-    #status_code = 200 & not is empty
-    assert response.status_code == 200
-    assert len(response.json) > 0
-
-
-def test_orders_getOne_response_404(client): 
-    response = client.get('/api/orders/abcxyz')
-    #status_code = 404 
-    assert response.status_code == 404
-
-
-def test_orders_Put_response_200(client): 
-    global orderid
-    doc = {
-        'item_description': 'Desc. Test Updated'
-    }
-    response = client.put('/api/orders/'+orderid, json=doc)
-    assert response.status_code == 200    
-
-def test_orders_Delete_response_200(client): 
-    global orderid
-    response = client.delete('/api/orders/'+orderid)
-
-    #status_code = 200 & not is empty
-    assert response.status_code == 200
-    assert len(response.json) > 0    
