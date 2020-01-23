@@ -1,51 +1,61 @@
-#Dependencies
+import threading
+import time
+import json
 from os import getenv
 from dotenv import load_dotenv
 from os.path import dirname, isfile, join
 
 # setting enviroment file
-_ENV_FILE = join(dirname(__file__), '.env_')
+_ENV_FILE = join(dirname(__file__), '.env')
 if isfile(_ENV_FILE):
     load_dotenv(dotenv_path=_ENV_FILE)
 
-from kafka import KafkaConsumer
-from datetime import datetime
+from confluent_kafka import Consumer, KafkaError
 from utils.functions import corsify_response
 from flask import jsonify
 from os import getenv
-import threading
-import time
-import json
-import requests
 
-# Create an instance of the Kafka producer
-consumer = KafkaConsumer('topictest', 
-bootstrap_servers= getenv('HOST_KAFKA')+':9092',
-auto_offset_reset='earliest',
-enable_auto_commit=True,
-group_id='consumer_api',
-value_deserializer=lambda m: json.loads(m.decode('ascii')))
 
-#for add msg of kafka
+
 messages = []
 
-#GET
+consumer = Consumer({
+    'bootstrap.servers': getenv('HOST_KAFKA') + ':9092',
+    'group.id': 'consumer_api',
+    'auto.offset.reset': 'earliest',
+
+})
+
+consumer.subscribe(['topictest'])
+
+#consumer.close()
+
+
 def get():  
     global messages  
     return corsify_response(jsonify(messages)), 200
 
 
-def ReadMsgs():
+def read_msgs():
     global consumer
-    global messages 
+    global messages
     print('Initializing Thread Listener...')
-    for msg in consumer:
-        messages.append('offset {} - {}'.format(msg.offset, msg.value))
-        time.sleep(1)
+    
+    while True:
+        msg = consumer.poll(1.0)
 
+        if msg is None:
+            time.sleep(1)
+            continue
+        if msg.error():
+            print("Consumer error: {}".format(msg.error()))
+            continue
 
-# Create a Thread with a function without any arguments
-th = threading.Thread(target=ReadMsgs)
+        msg = 'Received message: {}'.format(msg.value().decode('utf-8'))
+        messages.append({"msg": msg})
+        print(msg)
 
-# Start the thread
+         
+# Create a Thread with the function
+th = threading.Thread(target=read_msgs)
 th.start()

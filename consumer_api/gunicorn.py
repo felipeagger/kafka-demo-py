@@ -1,0 +1,9 @@
+bind = '0.0.0.0:8083'
+workers = 4
+worker_class = 'gevent'
+worker_connections = 1000
+max_requests = int(workers * worker_connections)
+keepalive = 2
+max_requests_jitter = 5
+timeout = 30
+errorlog = '-'

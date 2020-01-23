@@ -6,10 +6,12 @@ WORKDIR /home/py/app
 
 COPY . .
 
-RUN pip3 install -r requirements.txt
+RUN pip3 install virtualenv
+
+RUN make setup
 
 ENTRYPOINT ["python"]
 
-EXPOSE 8081
+EXPOSE 8083
 
 CMD [ "app.py" ]

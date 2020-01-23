@@ -35,4 +35,4 @@ test:
 	@pytest --verbose --disable-pytest-warnings --color=yes tests/
 
 rundev:
-	python3 app.py
+	@gunicorn -c ./gunicorn.py app:app
