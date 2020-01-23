@@ -3,10 +3,20 @@
 <head>
 <title>Kafka Consumer</title>
 <h2>Kafka Consumer</h2>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
- 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <style>	
+.main {
+  padding-left: 30px;
+  margin-left: 30px;
+  border-left: 30px;
+  border-right: 30px;
+}
+
 #users {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
@@ -26,7 +36,7 @@
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
-  background-color: #6d4bdd;
+  background-color: gray;
   color: white;
 }	
 </style>
@@ -37,8 +47,27 @@
   
    app.controller("Ctrl", async function($scope, $http, $interval, $timeout) {
 
+      $scope.produceMessage = function(){
+          
+          $http({
+              url: 'http://localhost:8080/api/producer',
+              method: "POST",
+              headers: {'Content-Type': 'application/json'},
+              data: { 'msg' : $scope.txtMessage }
+          })
+          .then(function(response) {
+                  // success
+                  $scope.send = true;
+          }, 
+          function(response) { // optional
+                  // failed
+                  $scope.send = false;
+          });
+
+	    };
+
 	    function longPooling(){
-	  	    $http.get('/api/consumer').then(function(response){
+	  	    $http.get('http://localhost:8083/api/consumer').then(function(response){
 			
 			  $scope.finaltopic = response.data; 		
 		    });
@@ -54,7 +83,7 @@
 <body>
  
   
-  <div ng-app="App" ng-controller="Ctrl">
+  <div ng-app="App" ng-controller="Ctrl" id="main">
     <h4>Final Topic</h4> 
     
     <table class="table" id="users" >
@@ -63,15 +92,25 @@
 	  </tr>	  
 	   <tbody ng-repeat="i in finaltopic">	  
 	      <tr>
-			 <td>{{i}}</td> 
+			 <td>{{i.msg}}</td> 
           </tr>		  
 	  </tbody>	   		  
 	</table>
 	
 
-	<br><br>
-	
-	<a href="/api/consumer">Retorno da API</a>
+  <br><br>
+
+  <form ng-submit="produceMessage()">
+    Message:<br>
+    <textarea rows="4" cols="100" name="comment" ng-model="txtMessage">
+    </textarea>
+    <br><br>
+    <button class="btn btn-primary" type="submit">Produce</button>
+  </form> 
+  
+  <br><br><br><br>
+
+	<a href="http://localhost:8083/api/consumer">Retorno da API</a>
 
   <br>
 

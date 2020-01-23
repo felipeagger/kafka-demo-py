@@ -12,6 +12,7 @@ if isfile(_ENV_FILE):
 
 from confluent_kafka import Consumer, KafkaError
 from utils.functions import corsify_response
+from utils.apmconfig import apm
 from flask import jsonify
 from os import getenv
 
@@ -42,18 +43,21 @@ def read_msgs():
     print('Initializing Thread Listener...')
     
     while True:
-        msg = consumer.poll(1.0)
+        try:
+            msg = consumer.poll(1.0)
 
-        if msg is None:
-            time.sleep(1)
-            continue
-        if msg.error():
-            print("Consumer error: {}".format(msg.error()))
-            continue
+            if msg is None:
+                time.sleep(1)
+                continue
+            if msg.error():
+                print("Consumer error: {}".format(msg.error()))
+                continue
 
-        msg = 'Received message: {}'.format(msg.value().decode('utf-8'))
-        messages.append({"msg": msg})
-        print(msg)
+            msg = 'Received message: {}'.format(msg.value().decode('utf-8'))
+            messages.append({"msg": msg})
+            print(msg)
+        except Exception:
+            apm.capture_exception()
 
          
 # Create a Thread with the function

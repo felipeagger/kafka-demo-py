@@ -12,11 +12,25 @@ from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
 from config import config
 from routes import consumerRoutes
+from utils.apmconfig import apm
 
 
 def create_app(config_name):
     app = Flask(__name__, static_folder='static')
     app.config.from_object(config[config_name])
+
+    app.config['ELASTIC_APM'] = {
+        'SERVICE_NAME': 'kafka-consumer-api',
+        'SERVICE_VERSION': '1.0.0',
+        'SERVER_URL': 'http://' + getenv('HOST_APM') + ':8200',
+        'SECRET_TOKEN': '',
+        'CAPTURE_BODY': 'all',
+        'DEBUG': True,
+        'SERVER_TIMEOUT': 2
+    }
+
+    app.config["DEBUG"] = True
+    apm.init_app(app)
     CORS(app)
     return app
 
@@ -25,6 +39,9 @@ app = create_app(getenv('FLASK_ENV') or 'default')
 
 app.register_blueprint(consumerRoutes)
 
+@app.route('/index')  
+def send_index():  
+    return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/swagger.json')  
 def send_file():  
@@ -41,6 +58,7 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
     }
 )
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
+
 
 if __name__ == '__main__':
     ip = '0.0.0.0'
