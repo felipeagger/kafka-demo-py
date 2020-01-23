@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Kafka Consumer</title>
+<h2>Kafka Consumer</h2>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+ 
+<style>	
+#users {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#users td, #users th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#users tr:nth-child(even){background-color: #f2f2f2;}
+
+#users tr:hover {background-color: #ddd;}
+
+#users th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #6d4bdd;
+  color: white;
+}	
+</style>
+
+<script>
+
+  var app = angular.module("App", []);
+  
+   app.controller("Ctrl", async function($scope, $http, $interval, $timeout) {
+
+	    function longPooling(){
+	  	    $http.get('/api/consumer').then(function(response){
+			
+			  $scope.finaltopic = response.data; 		
+		    });
+	    };
+
+        $interval(longPooling, 1000);
+	  
+	});
+	
+</script>
+
+</head>
+<body>
+ 
+  
+  <div ng-app="App" ng-controller="Ctrl">
+    <h4>Final Topic</h4> 
+    
+    <table class="table" id="users" >
+	  <tr>
+      <th>Message</th>	  
+	  </tr>	  
+	   <tbody ng-repeat="i in finaltopic">	  
+	      <tr>
+			 <td>{{i}}</td> 
+          </tr>		  
+	  </tbody>	   		  
+	</table>
+	
+
+	<br><br>
+	
+	<a href="/api/consumer">Retorno da API</a>
+
+  <br>
+
+  </div>
+  
+  
+</body>
+</html>

@@ -43,5 +43,5 @@ def post(body):
 
         return corsify_response(jsonify(body)), 201            
     except Exception as e:
-        return corsify_response(jsonify({'msg': 'Bad Request!', 'error': str(e)})), 400
         print(e)
+        return corsify_response(jsonify({'msg': 'Bad Request!', 'error': str(e)})), 400
