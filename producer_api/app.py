@@ -10,8 +10,8 @@ if isfile(_ENV_FILE):
 from flask import Flask, send_from_directory
 from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
-from producer_api.config import config
-from producer_api.routes import producerRoutes
+from config import config
+from routes import producerRoutes
 
 
 def create_app(config_name):

@@ -1,5 +1,5 @@
 from flask import request, Blueprint
-from producer_api.controllers.producer_controller import *
+from controllers.producer_controller import *
 
 producerRoutes = Blueprint('routes', __name__)
 

@@ -7,18 +7,21 @@ _ENV_FILE = join(dirname(__file__), '.env')
 if isfile(_ENV_FILE):
     load_dotenv(dotenv_path=_ENV_FILE)
 
-from kafka import KafkaProducer
-from producer_api.utils.functions import corsify_response
+from confluent_kafka import Producer
+from utils.functions import corsify_response
 from flask import jsonify
 from os import getenv
 import json
 
 
-producer = KafkaProducer(bootstrap_servers=getenv('HOST_KAFKA')+':9092',
-    value_serializer=lambda m: json.dumps(m).encode('ascii'))
+producer = Producer({'bootstrap.servers': getenv('HOST_KAFKA')+':9092'})
 
-# string data
-# value_serializer=lambda v: str(v).encode('utf-8')) 
+
+def delivery_report(err, msg):
+    if err is not None:
+        print('Message delivery failed: {}'.format(err))
+    else:
+        print('Message delivered to {} [{}]'.format(msg.topic(), msg.partition()))
 
 
 def get():
@@ -32,9 +35,13 @@ def get():
 def post(body):
     try:
 
-        producer.send('topictest', body)
+        msg = json.dumps(body)
+
+        producer.poll(0)
+        producer.produce('topictest', msg.encode('utf-8'), callback=delivery_report)
+        producer.flush()
 
         return corsify_response(jsonify(body)), 201            
     except Exception as e:
-        return corsify_response(jsonify({'msg':'Bad Request!', 'error': str(e)})), 400
+        return corsify_response(jsonify({'msg': 'Bad Request!', 'error': str(e)})), 400
         print(e)
