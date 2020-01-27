@@ -21,13 +21,13 @@ from os import getenv
 messages = []
 
 consumer = Consumer({
-    'bootstrap.servers': getenv('HOST_KAFKA') + ':9092',
+    'bootstrap.servers': getenv('HOST_KAFKA') + ':29092',
     'group.id': 'consumer_api',
     'auto.offset.reset': 'earliest',
 
 })
 
-consumer.subscribe(['topictest'])
+consumer.subscribe(['output_users'])
 
 #consumer.close()
 
@@ -53,8 +53,8 @@ def read_msgs():
                 print("Consumer error: {}".format(msg.error()))
                 continue
 
-            msg = 'Received message: {}'.format(msg.value().decode('utf-8'))
-            messages.append({"msg": msg})
+            msg = msg.value().decode('utf-8')
+            messages.append(msg)
             print(msg)
         except Exception:
             apm.capture_exception()

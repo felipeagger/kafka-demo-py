@@ -1,4 +1,3 @@
-import threading
 from flask import jsonify, request, Blueprint
 from utils.functions import corsify_response
 from controllers.consumer_controller import *

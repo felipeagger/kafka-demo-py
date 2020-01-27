@@ -8,8 +8,4 @@ COPY . .
 
 RUN pip3 install -r requirements.txt --upgrade
 
-ENTRYPOINT ["python"]
-
-EXPOSE 8080
-
-CMD [ "app.py" ]
+CMD [ "faust", "-A", "app", "worker", "-l", "info" ]

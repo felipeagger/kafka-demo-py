@@ -34,7 +34,7 @@ No Navegador acesse:
 
 Producer API = http://127.0.0.1:8080/api-docs
 
-Consumer API = http://127.0.0.1:8083/api-docs
+Consumer API = http://127.0.0.1:8084/api-docs
 
 # Links/Observações
 

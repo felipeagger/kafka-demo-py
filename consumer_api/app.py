@@ -19,18 +19,19 @@ def create_app(config_name):
     app = Flask(__name__, static_folder='static')
     app.config.from_object(config[config_name])
 
-    app.config['ELASTIC_APM'] = {
-        'SERVICE_NAME': 'kafka-consumer-api',
-        'SERVICE_VERSION': '1.0.0',
-        'SERVER_URL': 'http://' + getenv('HOST_APM') + ':8200',
-        'SECRET_TOKEN': '',
-        'CAPTURE_BODY': 'all',
-        'DEBUG': True,
-        'SERVER_TIMEOUT': 2
-    }
-
     app.config["DEBUG"] = True
-    apm.init_app(app)
+
+    # app.config['ELASTIC_APM'] = {
+    #     'SERVICE_NAME': 'kafka-consumer-api',
+    #     'SERVICE_VERSION': '1.0.0',
+    #     'SERVER_URL': 'http://' + getenv('HOST_APM') + ':8200',
+    #     'SECRET_TOKEN': '',
+    #     'CAPTURE_BODY': 'all',
+    #     'DEBUG': True,
+    #     'SERVER_TIMEOUT': 2
+    # }
+
+    # apm.init_app(app)
     CORS(app)
     return app
 

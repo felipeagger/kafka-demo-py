@@ -53,7 +53,7 @@
               url: 'http://localhost:8080/api/producer',
               method: "POST",
               headers: {'Content-Type': 'application/json'},
-              data: { 'msg' : $scope.txtMessage }
+              data: { 'username' : $scope.txtMessage }
           })
           .then(function(response) {
                   // success
@@ -67,9 +67,16 @@
 	    };
 
 	    function longPooling(){
-	  	    $http.get('http://localhost:8083/api/consumer').then(function(response){
-			
-			  $scope.finaltopic = response.data; 		
+	  	    $http.get('http://localhost:8084/api/consumer').then(function(response){
+
+            function process(user) {
+              return JSON.parse(user);
+            }
+
+            users_obj = response.data.map(process);
+            
+            $scope.finaltopic = users_obj;
+
 		    });
 	    };
 
@@ -88,12 +95,24 @@
     
     <table class="table" id="users" >
 	  <tr>
-      <th>Message</th>	  
+      <th>Avatar</th>
+      <th>Login</th>
+      <th>Name</th>
+      <th>Bio</th>
+      <th>Location</th>	  
+      <th>Blog</th>
+      <th>Created At</th>
 	  </tr>	  
 	   <tbody ng-repeat="i in finaltopic">	  
-	      <tr>
-			 <td>{{i.msg}}</td> 
-          </tr>		  
+	     <tr>
+       <td><img src={{i.avatar_url}} alt="" height=50 width=50></img></td> 
+       <td>{{i.login}}</td> 
+       <td>{{i.name}}</td> 
+       <td>{{i.bio}}</td> 
+       <td>{{i.location}}</td> 
+       <td>{{i.blog}}</td> 
+       <td>{{i.created_at}}</td>
+       </tr>		  
 	  </tbody>	   		  
 	</table>
 	
@@ -101,16 +120,16 @@
   <br><br>
 
   <form ng-submit="produceMessage()">
-    Message:<br>
-    <textarea rows="4" cols="100" name="comment" ng-model="txtMessage">
+    Username:<br>
+    <textarea rows="1" cols="100" name="comment" ng-model="txtMessage">
     </textarea>
     <br><br>
-    <button class="btn btn-primary" type="submit">Produce</button>
+    <button class="btn btn-primary" type="submit">Process</button>
   </form> 
   
   <br><br><br><br>
 
-	<a href="http://localhost:8083/api/consumer">Retorno da API</a>
+	<a href="http://localhost:8084/api/consumer">Retorno da API</a>
 
   <br>
 

@@ -14,7 +14,7 @@ from os import getenv
 import json
 
 
-producer = Producer({'bootstrap.servers': getenv('HOST_KAFKA')+':9092'})
+producer = Producer({'bootstrap.servers': getenv('HOST_KAFKA')+':29092'})
 
 
 def delivery_report(err, msg):
@@ -38,7 +38,7 @@ def post(body):
         msg = json.dumps(body)
 
         producer.poll(0)
-        producer.produce('topictest', msg.encode('utf-8'), callback=delivery_report)
+        producer.produce('input_users', msg.encode('utf-8'), callback=delivery_report)
         producer.flush()
 
         return corsify_response(jsonify(body)), 201            
