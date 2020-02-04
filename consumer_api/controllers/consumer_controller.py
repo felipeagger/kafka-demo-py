@@ -44,7 +44,7 @@ def read_msgs():
     
     while True:
         try:
-            msg = consumer.poll(1.0)
+            msg = consumer.poll(0.1)
 
             if msg is None:
                 time.sleep(1)

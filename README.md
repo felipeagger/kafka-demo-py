@@ -1,7 +1,7 @@
 # kafka-demo-py
-Demo Using Kafka with Python
+Demo Using Confluent-Kafka with Python
 
-Producer/Consumer comunicando entre si Utilizando Apache Kafka, em Python.
+Producer/Stream Processor/Consumer comunicando entre si Utilizando Confluent Kafka, em Python.
 
 # Subir a Aplicacao com Docker:
   Acesse a raiz do repositorio e rode: 
@@ -16,11 +16,11 @@ Producer/Consumer comunicando entre si Utilizando Apache Kafka, em Python.
 
 # Dependencias
 
-Flask, kafka-python, pytest, flask-swagger-ui
+Flask, confluent-kafka, Faust, pytest, flask-swagger-ui
 
 # Requisitos :
 
-Deixar as Porta (8080, 8081, 9092) do seu host local livre, pois serão essas portas que as aplicacões irao utilizar.
+Deixar as Porta (8080, 8084, 9092) do seu host local livre, pois serão essas portas que as aplicacões irao utilizar.
 
 # Fluxo de Inicialização da Aplicacao
 
@@ -34,7 +34,7 @@ No Navegador acesse:
 
 Producer API = http://127.0.0.1:8080/api-docs
 
-Consumer API = http://127.0.0.1:8084/api-docs
+Consumer API = http://127.0.0.1:8084/index
 
 # Links/Observações
 

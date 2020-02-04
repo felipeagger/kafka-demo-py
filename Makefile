@@ -22,13 +22,17 @@ clean:
 
 docker:
 	@echo "---- Building & Up Container ----"
+	@docker-compose -f compose-kafka.yml down
+	@docker-compose -f compose-kafka.yml up -d
+	@sleep 3
 	@docker-compose down
 	@docker-compose build	
 	@docker-compose up -d
 	@sleep 5
 	@echo "---- EndPoints ----"
 	@echo "---- Producer API - http://127.0.0.1:8080/api-docs/ ----"
-	@echo "---- Consumer API - http://127.0.0.1:8081/api-docs/ ----"
+	@echo "---- Consumer API - http://127.0.0.1:8084/index ----"
 
 dockerdown:
 	@docker-compose down
+	@docker-compose -f compose-kafka.yml down
