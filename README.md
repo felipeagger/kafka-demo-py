@@ -5,15 +5,19 @@ Producer/Stream Processor/Consumer comunicando entre si Utilizando Confluent Kaf
 
 ![GIF of using](/media/front.gif)
 
-# Input Topic:
+# Fluxo
+
+- Front faz um POST para o producer, inserindo o username no topic "input_users".
+- Stream Processor consome do topico "input_users", processa(busca no Github) e insere o resultado no topico "output_users".
+- Front faz long polling no Consumer que consome os resultados do topico "output_users".
+
+# Input Topic
 
 ![Image of Input Topics](/media/input.png)
 
-# Output Topic:
+# Output Topic
 
 ![Image of Output Topics](/media/output.png)
-
-# Architecture:
 
 # Subir a Aplicacao com Docker:
   Acesse a raiz do repositorio e rode: 
