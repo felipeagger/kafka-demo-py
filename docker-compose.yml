@@ -23,6 +23,7 @@ services:
     container_name: consumer-api
     build: './consumer_api'
     environment:
+      APP_PORT: 8084
       HOST_KAFKA: broker
       HOST_APM: apm-server
       FLASK_ENV: development
