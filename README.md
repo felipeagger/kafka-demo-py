@@ -3,6 +3,18 @@ Demo Using Confluent-Kafka with Python
 
 Producer/Stream Processor/Consumer comunicando entre si Utilizando Confluent Kafka, em Python.
 
+![GIF of using](/media/front.gif)
+
+# Input Topic:
+
+![Image of Input Topics](/media/input.png)
+
+# Output Topic:
+
+![Image of Output Topics](/media/output.png)
+
+# Architecture:
+
 # Subir a Aplicacao com Docker:
   Acesse a raiz do repositorio e rode: 
   
